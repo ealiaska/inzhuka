@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Для Инжу ♡</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;color:#492332;background:#fff2ee;background-image:radial-gradient(#e8a4ad66 1px,transparent 1px);background-size:19px 19px;font:17px/1.55 system-ui,sans-serif}
+main{width:min(1050px,calc(100% - 44px));margin:auto}
+header,footer{padding:24px 0;border-bottom:1px solid #e6c0c3;font-size:13px;letter-spacing:.15em;text-transform:uppercase}
+.hero{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:9%;padding:75px 0}
+small{letter-spacing:.18em;text-transform:uppercase;color:#9a3655}
+h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.02;margin:14px 0 20px}
+h1{font-size:clamp(58px,9vw,128px);letter-spacing:-.07em} h1 em{color:#b92d5c} h2{font-size:clamp(36px,5vw,64px)}
+p{max-width:39ch}
+button{border:0;border-radius:50px;background:#a8204d;color:white;font:inherit;font-weight:650;padding:14px 24px;cursor:pointer}
+button:hover{background:#841738} button:focus-visible,a:focus-visible{outline:3px solid #472132;outline-offset:4px}
+figure{margin:0;background:#fffaf5;padding:13px 13px 16px;box-shadow:0 17px 44px #752e4926;transform:rotate(4deg);position:relative}
+figure:before{content:"";position:absolute;width:108px;height:32px;background:#edb1b3c9;top:-14px;left:calc(50% - 54px);transform:rotate(-9deg)}
+img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:#efc6c7}
+figcaption{text-align:center;font:italic 21px Georgia,serif;padding-top:13px}
+.note{display:grid;grid-template-columns:1fr 2fr;gap:7%;align-items:center;background:#ffe1e6;border:1px solid #e9b1bf;padding:clamp(20px,5vw,62px);border-radius:24px;margin:0 0 42px}
+.note img{border-radius:50% 50% 14px 14px;aspect-ratio:1}
+footer{border:0;border-top:1px solid #e6c0c3;letter-spacing:.06em} a{color:#8b2646}
+dialog{width:min(480px,calc(100% - 32px));max-height:85vh;border:1px solid #e9b1bf;border-radius:25px;padding:35px;background:#fff7f3;color:inherit;box-shadow:0 20px 80px #48243255}
+dialog::backdrop{background:#42213380}
+.particle{position:fixed;pointer-events:none;z-index:5;animation:fly 1.2s ease-out forwards;color:#bd2458;text-shadow:0 1px 2px white}
+.particle:popover-open{inset:auto;margin:0;padding:0;border:0;background:transparent;overflow:visible}
+@keyframes fly{from{transform:translate(-50%,-50%) scale(.5)}to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+@media(max-width:660px){.hero{grid-template-columns:1fr;gap:48px;padding:44px 0 52px}figure{width:90%;justify-self:center}.note{grid-template-columns:1fr;gap:18px}.note img{max-width:180px}}
+</style>
+<main>
+<header>♡ &nbsp; Для тебя, Инжу</header>
+<section class="hero" aria-labelledby="title">
+<div><small>Открытка от меня</small><h1 id="title">Инжу,<br><em>люблю тебя.</em></h1>
+<p>Захотелось сделать тебе маленький сюрприз. Тут котики, сердечки и кое-что, что я хочу сказать тебе лично.</p>
+<button id="open" type="button">Открыть письмо &nbsp;♥</button></div>
+<figure><img src="./cat.jpg" alt="Рыжий кот на столе"><figcaption>Мур. Это тебе ♡</figcaption></figure>
+</section>
+<section class="note" aria-labelledby="hug"><img src="./yawn.jpg" alt="Рыжий кот зевает, зажмурив глаза" loading="lazy"><div><h2 id="hug">И ещё обнимашка</h2><p>Если бы я мог обнять тебя через экран, я бы уже это сделал.</p><button id="hearts" type="button">Поймать сердечки</button><p id="status" role="status" hidden></p></div></section>
+<footer>Целую и обнимаю ♡ · Фото котиков на Unsplash <a href="https://unsplash.com/photos/75715CVEJhI">1</a> и <a href="https://unsplash.com/photos/xEINU3C4AfY">2</a></footer>
+</main>
+<dialog id="letter" aria-labelledby="letter-title">
+<small>Только для тебя ♡</small><h2 id="letter-title">Моя Инжу</h2>
+<p>Мне нравится, как рядом с тобой даже самый обычный день становится особенным. И как хочется рассказать тебе любую мелочь просто потому, что это ты.</p>
+<p>Спасибо, что ты есть. Я люблю тебя. И если ты сейчас улыбнулась, я уже рад, что сделал эту открытку.</p>
+<p>Обнимаю крепко,<br>твой Алиаскар ♡</p>
+<form method="dialog"><button>Закрыть письмо</button></form>
+</dialog>
+<script>
+const letter = document.querySelector('#letter');
+const openButton = document.querySelector('#open');
+const heartButton = document.querySelector('#hearts');
+const status = document.querySelector('#status');
+let hugs = 0;
+
+function scatter(x, y) {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  for (let index = 0; index < 20; index++) {
+    const heart = document.createElement('span');
+    heart.className = 'particle';
+    heart.setAttribute('aria-hidden', 'true');
+    heart.textContent = index % 3 === 0 ? '♡' : '♥';
+    heart.style.left = x + 'px';
+    heart.style.top = y + 'px';
+    heart.style.fontSize = (14 + Math.random() * 26) + 'px';
+    heart.style.setProperty('--x', (Math.random() * 350 - 175) + 'px');
+    heart.style.setProperty('--y', (-40 - Math.random() * 220) + 'px');
+    heart.style.setProperty('--r', (Math.random() * 160 - 80) + 'deg');
+    const layer = letter.open ? letter : document.body;
+    layer.append(heart);
+    if (heart.showPopover) {
+      heart.popover = 'manual';
+      heart.showPopover();
+    }
+    setTimeout(() => heart.remove(), 1250);
+  }
+}
+
+openButton.addEventListener('click', () => {
+  letter.showModal();
+  scatter(innerWidth / 2, innerHeight / 2);
+});
+heartButton.addEventListener('click', () => {
+  const rect = heartButton.getBoundingClientRect();
+  scatter(rect.left + rect.width / 2, rect.top);
+  hugs += 1;
+  status.hidden = false;
+  status.textContent = hugs === 1 ? 'Лови обнимашку! ♡' : 'Обнимашек поймано: ' + hugs + ' ♡';
+});
+</script>
+</html>
